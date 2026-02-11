@@ -11,17 +11,19 @@ LOKI_URL="http://loki:3100"
 
 echo "🔧 Configuring Kibana to connect to Loki..."
 
-# Create a Loki data source in Kibana
-curl -X POST "$KIBANA_URL/api/data_sources" \
+# Create a Loki data source in Kibana using the correct Kibana 8.x endpoint
+curl -X POST "$KIBANA_URL/api/saved_objects/data-source" \
   -H "Content-Type: application/json" \
   -H "kbn-xsrf: true" \
   -d '{
-    "name": "Loki",
-    "type": "loki",
-    "typeVersion": 1,
-    "isDefault": false,
-    "access": "proxy",
-    "url": "'$LOKI_URL'"
+    "attributes": {
+      "name": "Loki",
+      "type": "loki",
+      "typeVersion": 1,
+      "isDefault": false,
+      "access": "proxy",
+      "url": "'$LOKI_URL'"
+    }
   }' 2>/dev/null
 
 echo ""
